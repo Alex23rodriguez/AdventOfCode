@@ -8,9 +8,8 @@ def getcoords(xystr):
 
 with open(filename) as f:
     input = f.readlines()
-    input = [l.split("at ")[1:] for l in input]
+    input = [line.split("at ")[1:] for line in input]
     input = [(getcoords(s[0].split(":")[0]), getcoords(s[1].strip())) for s in input]
-
 
 ###
 
