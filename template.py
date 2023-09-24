@@ -1,14 +1,35 @@
 # imports
 
 ###
-YEAR = 2022
-DAY = 0
+test_txt = open("test.txt").read()
 
-filename = f"{YEAR}/{DAY}.txt"
-txt = open(filename).read()
-lines = txt.splitlines()
-print(f"read {len(lines)} lines")
+input_txt = open("input.txt").read()
+print(f"read {len(input_txt.splitlines())} lines")
 ###
+# read util functions
 
-for line in txt.splitlines():
-    pass
+
+###
+def prepare(inp):
+    lines = inp.splitlines()
+    # UPDATE
+    out = [l for l in lines]
+    return out
+
+
+def check_test():
+    global test
+    testans = None  # UPDATE
+    assert test == testans, "test should be {testans}, but instead was {test}"
+
+
+teststart = prepare(test_txt)
+start = prepare(input_txt)
+###
+# util functions
+
+###
+# main
+
+###
+check_test()
