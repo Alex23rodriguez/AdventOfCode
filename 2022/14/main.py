@@ -1,11 +1,10 @@
-filename = "14.txt"
-
-with open(filename) as f:
-    input = f.readlines()
-
+test_txt = open("test.txt").read()
+print(f"read {len(test_txt.splitlines())} test lines")
+input_txt = open("input.txt").read()
+print(f"read {len(input_txt.splitlines())} lines")
 ###
 
-paths = [line.replace("\n", "").split(" -> ") for line in input]
+paths = [line.replace("\n", "").split(" -> ") for line in input_txt.splitlines()]
 paths = [[tuple(map(int, coord.split(","))) for coord in line] for line in paths]
 
 ###

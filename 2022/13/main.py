@@ -2,15 +2,17 @@ import json
 from itertools import zip_longest
 from functools import cmp_to_key
 
-filename = "13.txt"
+###
 
-with open(filename) as f:
-    input = f.read().split("\n\n")
+test_txt = open("test.txt").read()
+print(f"read {len(test_txt.splitlines())} test lines")
+input_txt = open("input.txt").read()
+print(f"read {len(input_txt.splitlines())} lines")
 
 ###
 
 pcks = []
-for pair in input:
+for pair in input_txt.split("\n\n"):
     a, b = pair.split()
     pcks.append((json.loads(a), json.loads(b)))
 
