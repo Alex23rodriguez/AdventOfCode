@@ -98,6 +98,7 @@ valves
 graph = iden_cross(tunnels)
 dist = floyd_warshall(graph)
 novisit = [k for k, v in dist["AA"].items() if v == float("inf")]
+keys = set([k for k, v in valves.items() if v > 0])
 ###
 novisit
 ###
@@ -113,7 +114,6 @@ for i, path in enumerate(paths):
 
 
 ###
-keys = set([k for k, v in valves.items() if v > 0])
 ###
 # all possible paths of 3
 ans = {}
@@ -133,3 +133,80 @@ for k, v in ans.items():
 ###
 for k, (s, r) in important.items():
     print(calc_best(k, s, r))
+###
+###
+### PART 2
+###
+###
+ans = {}
+n = 6
+for i, vs in enumerate(combinations(keys, n)):
+    if i % 1000 == 0:
+        print(i)
+    frst = vs[0]
+    for p in permutations(vs):
+        p1, p2 = p[:n//2], p[n//2:]
+        if p2[0] == frst:
+            break
+
+        me = calc(p1, rem=26)
+        ele = calc(p2, rem=26)
+        ans[(p1,p2)] = me, ele
+        
+###
+K = list(ans.keys())
+###
+for k in K[:10]:
+    print(k, ans[k])
+###
+max((a[0] + b[0] for a,b in ans.values()))
+###
+important = {}
+for k, v in ans.items():
+    if v[0][0]  + v[1][0] > 1800:
+        important[k] = v
+###
+len(important)
+###
+def calc_best2(traversed, scores):
+    global keys
+    remkeys = set(keys) - set(traversed[0]) - set(traversed[1])
+    best = 0
+    for p in permutations(remkeys):
+        s1 = calc(p,           scores[0][1], traversed[0][-1])[0] + scores[0][0]
+        s2 = calc(reversed(p), scores[1][1], traversed[1][-1])[0] + scores[1][0]
+        if s1 + s2 > best:
+            best = s1 + s2
+    return best
+###
+best = 0
+for i, (k, v) in enumerate(important.items()):
+    print(i)
+    s = calc_best2(k, v)
+    if s > best:
+        best = s
+        print(best)
+
+# i = 42, best = 2417 too low
+###
+best
+###
+
+important = {}
+for k, v in ans.items():
+    s = v[0][0] + v[1][0]
+    if s > 1600 and s <= 1800:
+        important[k] = v
+len(important)
+###
+best = 0
+besti = 0
+for i, (k, v) in enumerate(important.items()):
+    print(i)
+    s = calc_best2(k, v)
+    if s > best:
+        besti = i
+        best = s
+        print(best)
+print(besti, best)
+# i = 6484, best = 2487, too low :(
