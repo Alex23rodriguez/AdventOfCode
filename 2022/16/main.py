@@ -1,5 +1,5 @@
 # imports
-from itertools import permutations, combinations
+from itertools import combinations
 from datetime import datetime
 
 ###
@@ -69,7 +69,7 @@ def search(left: set, curr: str, rem: int, dist, valves):
 
 
 ###
-valves, tunnels = start
+valves, tunnels = teststart
 valves
 ###
 graph = iden_cross(tunnels)
@@ -80,3 +80,20 @@ print(datetime.now())
 ans = search(keys, "AA", 30, dist, valves)
 print("done!", ans)
 print(datetime.now())
+###
+###
+### PART 2
+###
+###
+n = len(keys) // 2 + 1
+###
+# not even efficient. many are repeated
+best = 0
+for i in range(1, n):
+    for c in combinations(keys, i):
+        k2 = set(c)
+        s1 = search(k2, "AA", 26, dist, valves)
+        s2 = search(keys - k2, "AA", 26, dist, valves)
+        if s1 + s2 > best:
+            best = s1 + s2
+print("done!", best)
