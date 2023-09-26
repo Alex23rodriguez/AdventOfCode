@@ -116,34 +116,55 @@ def spawn_rock(r: int, w: int, seq: str):
 # main
 
 
-def main(N: int, seq):
+def main(N: int, seq, snd_part=False):
+    global seen
     cave = [0b1111111]
     w = 0
     for r in range(N):
         # spawn rock
         rock = spawn_rock(r, w, seq)
-        # pprint(rock)
-        # pprint(cave)
         w += 4
 
         # fall rock
         level = 0
         while can_fall(rock, cave, level):
             level += 1
-            # pprint(cave, rock, level)
             rock = push(rock, cave[-level:], w, seq)
-            # pprint(cave, rock, level)
             w += 1
         cave = rest(rock, cave, level)
-        # pprint(cave)
+        # guess that a tower repeats every certain amount of steps
+        if snd_part and r > 1000:
+            key = hash(tuple(cave[-1000:]))
+            if key in seen:
+                rprev, lnprev = seen[key]
+                period = r - rprev
+                if (N - r) % period == 0:
+                    print(f"height at {N = }")
+                    ln = len(cave)
+                    deltah = ln - lnprev
+                    pending_loops = (N-r)//period
+                    h = pending_loops*deltah + ln - 2
+                    print(h)
+                    return
+            else:
+                seen[key] = (r, len(cave))
     print(len(cave) - 1)
 
 
 ###
+seen = {}
 N = 2022
 seq = start
 main(N, seq)
-
+###
+###
+### PART 2 ###
+###
+###
+seen = {}
+N = 1000000000000
+seq = start
+main(N, seq, snd_part=True)
 
 ###
 ###
