@@ -22,12 +22,6 @@ def prepare(inp):
     return out
 
 
-def check_test():
-    global test
-    testans = 27
-    assert test == testans, f"test should be {testans}, but instead was {test}"
-
-
 teststart = prepare(test_txt)
 start = prepare(input_txt)
 
@@ -78,7 +72,7 @@ for sensor, beacon in data:
     print(sensor, beacon)
     if r:
         loi = add_interval(loi, r)
-test= count_no_beacon(loi)
+test = count_no_beacon(loi)
 check_test()
 ###
 # problem
@@ -94,15 +88,19 @@ for sensor, beacon in data:
         print(r)
         loi = add_interval(loi, r)
 count_no_beacon(loi)
+
+
 ###
 ###
 # PART 2
 def freq(b):
-    return b[0]*4000000 + b[1]
+    return b[0] * 4000000 + b[1]
+
+
 ###
 for row in range(2000000, 4000001):
-# for row in range(21):
-    if row%100000 == 0:
+    # for row in range(21):
+    if row % 100000 == 0:
         print(row)
     loi = []
     for sensor, beacon in data:
@@ -117,4 +115,3 @@ for row in range(2000000, 4000001):
         print(freq((loi[0][1] + 1, row)))
         break
 print("done")
-

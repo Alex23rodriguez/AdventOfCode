@@ -34,12 +34,6 @@ def prepare(inp):
     return valves, tunnels
 
 
-def check_test():
-    global test
-    testans = None  # UPDATE
-    assert test == testans, "test should be {testans}, but instead was {test}"
-
-
 teststart = prepare(test_txt)
 start = prepare(input_txt)
 

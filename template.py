@@ -17,12 +17,6 @@ def prepare(inp):
     return out
 
 
-def check_test():
-    global test
-    testans = None  # UPDATE
-    assert test == testans, "test should be {testans}, but instead was {test}"
-
-
 teststart = prepare(test_txt)
 start = prepare(input_txt)
 ###
@@ -30,6 +24,3 @@ start = prepare(input_txt)
 
 ###
 # main
-
-###
-check_test()
