@@ -15,7 +15,7 @@ print(f"read {len(input_txt.splitlines())} lines")
 ###
 def prepare(inp):
     lines = inp.splitlines()
-    out = [tuple(map(int, l.split(","))) for l in lines]
+    out = set(tuple(map(int, l.split(","))) for l in lines)
     return out
 
 
@@ -70,7 +70,7 @@ def count_sa(points):
 ###
 # main
 points = start
-count_sa(points)
+print("Part 1 ans:", count_sa(points))
 
 
 ###
@@ -113,7 +113,7 @@ def get_negative(points):
 
 
 def invert_selection(neg):
-    points = []
+    points = set()
     a, b = get_bounds(neg, -1)
 
     for x in range(a[0], b[0] + 1):
@@ -121,7 +121,7 @@ def invert_selection(neg):
             for z in range(a[2], b[2] + 1):
                 p = (x, y, z)
                 if p not in neg:
-                    points.append(p)
+                    points.add(p)
     return points
 
 
@@ -134,6 +134,6 @@ points = start
 neg = get_negative(points)
 print(len(neg))
 points2 = invert_selection(neg)
-print("ans:", count_sa(points2))
+print("Part 2 ans:", count_sa(points2))
 
 print("took", datetime.now() - now)
