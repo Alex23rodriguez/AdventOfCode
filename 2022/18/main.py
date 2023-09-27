@@ -93,7 +93,7 @@ def check_adjacent(p, neg):
 def get_negative(points):
     a, b = get_bounds(points, padding=1)
     added = True
-    neg = [a]
+    neg = set([a])
     # could be made more efficient by keeping track of full layers
     # instead of iterating over them each time
     while added:
@@ -106,7 +106,7 @@ def get_negative(points):
                         continue
                     # check all 6 sides for outside
                     if check_adjacent(p, neg):
-                        neg.append(p)
+                        neg.add(p)
                         added = True
                         continue
     return neg
