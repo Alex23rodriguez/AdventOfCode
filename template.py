@@ -37,21 +37,35 @@ def timed():
 
 
 ### read functions
-def parse_lines(lines: list[str]):
-    out = [line_func(line) for line in lines]
+def parse_all_lines(lines: list[str], func):
+    out = [func(line) for line in lines]
     return out
 
 
 ###
-def line_func(line: str):
+def parse_line(line: str):
     # TODO
     return line
 
 
-teststart = parse_lines(test_lines)
-start = parse_lines(input_lines)
-###
-# util functions
+teststart = parse_all_lines(test_lines, parse_line)
+start = parse_all_lines(input_lines, parse_line)
+### util functions
+
+### main
+
 
 ###
-# main
+# PART 2
+###
+# change parse_line if necessary
+def parse_line_2(line: str):
+    # TODO
+    return line
+
+
+teststart = parse_all_lines(test_lines, parse_line_2)
+start = parse_all_lines(input_lines, parse_line_2)
+### util funcs
+
+### main
