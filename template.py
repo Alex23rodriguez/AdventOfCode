@@ -42,15 +42,18 @@ def parse_all_lines(lines: list[str], func):
     return out
 
 
-###
+### util defenitions
+
+
+### parse input
 def parse_line(line: str):
     # TODO
     return line
 
 
-teststart = parse_all_lines(test_lines, parse_line)
-start = parse_all_lines(input_lines, parse_line)
-### util functions
+with timed():
+    teststart = parse_all_lines(test_lines, parse_line)
+    start = parse_all_lines(input_lines, parse_line)
 
 ### main
 
@@ -58,14 +61,18 @@ start = parse_all_lines(input_lines, parse_line)
 ###
 # PART 2
 ###
+### util defenitions
+
+
+### parse input - cange parse_line if necessary
 # change parse_line if necessary
 def parse_line_2(line: str):
     # TODO
     return line
 
 
-teststart = parse_all_lines(test_lines, parse_line_2)
-start = parse_all_lines(input_lines, parse_line_2)
-### util funcs
+with timed():
+    teststart = parse_all_lines(test_lines, parse_line_2)
+    start = parse_all_lines(input_lines, parse_line_2)
 
 ### main
