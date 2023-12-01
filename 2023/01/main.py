@@ -1,23 +1,10 @@
 ### imports
-from contextlib import contextmanager
-from datetime import datetime
+import sys
+
+sys.path.append("../..")
+from util import timed
 
 import re
-
-# import json
-# from itertools import (
-#     combinations,
-#     permutations,
-#     zip_longest,
-#     accumulate,
-#     combinations_with_replacement,
-# )
-# from collections import defaultdict, Counter
-# from functools import reduce, lru_cache, partial
-#
-# import sys
-# sys.path.append('../..')
-# import util
 
 ### read files
 test_txt = open("test.txt").read()
@@ -27,15 +14,6 @@ input_txt = open("input.txt").read()
 input_lines = input_txt.splitlines()
 print(f"read {len((input_lines))} lines")
 
-### timing funcs
-
-
-@contextmanager
-def timed():
-    start_time = datetime.now()
-    yield
-    print(f"took {datetime.now() - start_time}")
-
 
 ### read functions
 def parse_all_lines(lines: list[str], func):
@@ -43,10 +21,11 @@ def parse_all_lines(lines: list[str], func):
     return out
 
 
-###
+### util defenitions
 pattern = re.compile(r"(\d).*(\d)|(\d)")
 
 
+### parse input
 def parse_line(line: str):
     matches = pattern.search(line)
     assert matches
@@ -59,7 +38,6 @@ def parse_line(line: str):
 with timed():
     teststart = parse_all_lines(test_lines, parse_line)
     start = parse_all_lines(input_lines, parse_line)
-### util functions
 
 ### main
 sum(start)
@@ -67,7 +45,8 @@ sum(start)
 ###
 # PART 2
 ###
-# change parse_line if necessary
+
+### util defenitions
 test_lines2 = """two1nine
 eightwothree
 abcone2threexyz
@@ -88,11 +67,11 @@ numsdict = {
     "nine": "9",
 }
 nums = "|".join(numsdict.keys())
-###
 
 pattern = re.compile(rf"({nums}|\d).*({nums}|\d)|({nums}|\d)")
 
 
+### parse input
 def parse_line_2(line: str):
     matches = pattern.search(line)
     assert matches
