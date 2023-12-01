@@ -4,13 +4,15 @@ import sys
 sys.path.append("../..")
 from util import timed
 
+from pathlib import Path
+
 import re
 
 ### read files
-test_txt = open("test.txt").read()
+test_txt = Path("test.txt").read_text()
 test_lines = test_txt.splitlines()
 print(f"read {len((test_lines))} test lines")
-input_txt = open("input.txt").read()
+input_txt = Path("input.txt").read_text()
 input_lines = input_txt.splitlines()
 print(f"read {len((input_lines))} lines")
 
@@ -45,16 +47,10 @@ sum(start)
 ###
 # PART 2
 ###
+test_txt = Path("text2.txt").read_text()
+test_lines = test_txt.splitlines()
 
 ### util defenitions
-test_lines2 = """two1nine
-eightwothree
-abcone2threexyz
-xtwone3four
-4nineeightseven2
-zoneight234
-7pqrstsixteen""".splitlines()
-
 numsdict = {
     "one": "1",
     "two": "2",
@@ -86,7 +82,7 @@ def parse_line_2(line: str):
 
 
 with timed():
-    teststart = parse_all_lines(test_lines2, parse_line_2)
+    teststart = parse_all_lines(test_lines, parse_line_2)
     start = parse_all_lines(input_lines, parse_line_2)
 ###
 sum(start)

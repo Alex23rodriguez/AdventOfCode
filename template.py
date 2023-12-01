@@ -4,6 +4,8 @@ import sys
 sys.path.append("../..")
 from util import timed
 
+from pathlib import Path
+
 import re
 import json
 from itertools import (
@@ -20,10 +22,10 @@ from util import iden_cross
 from algs import dijkstra, floyd_warshall
 
 ### read files
-test_txt = open("test.txt").read()
+test_txt = Path("test.txt").read_text()
 test_lines = test_txt.splitlines()
 print(f"read {len((test_lines))} test lines")
-input_txt = open("input.txt").read()
+input_txt = Path("input.txt").read_text()
 input_lines = input_txt.splitlines()
 print(f"read {len((input_lines))} lines")
 
@@ -53,6 +55,11 @@ with timed():
 ###
 # PART 2
 ###
+p = Path("test2.txt")
+if p.exists():
+    test_txt = p.read_text()
+    test_lines = test_txt.splitlines()
+
 
 ### util defenitions
 
