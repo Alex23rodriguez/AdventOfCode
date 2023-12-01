@@ -1,22 +1,21 @@
 ### imports
-from contextlib import contextmanager
-from datetime import datetime
+import sys
 
-# import re
-# import json
-# from itertools import (
-#     combinations,
-#     permutations,
-#     zip_longest,
-#     accumulate,
-#     combinations_with_replacement,
-# )
-# from collections import defaultdict, Counter
-# from functools import reduce, lru_cache, partial
-#
-# import sys
-# sys.path.append('../..')
-# import util
+sys.path.append("../..")
+from util import timed
+
+import re
+import json
+from itertools import (
+    combinations,
+    permutations,
+    zip_longest,
+    accumulate,
+    combinations_with_replacement,
+)
+from collections import defaultdict, Counter
+from functools import reduce, lru_cache, partial
+
 
 ### read files
 test_txt = open("test.txt").read()
@@ -25,15 +24,6 @@ print(f"read {len((test_lines))} test lines")
 input_txt = open("input.txt").read()
 input_lines = input_txt.splitlines()
 print(f"read {len((input_lines))} lines")
-
-### timing funcs
-
-
-@contextmanager
-def timed():
-    start_time = datetime.now()
-    yield
-    print(f"took {datetime.now() - start_time}")
 
 
 ### read functions
