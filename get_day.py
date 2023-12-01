@@ -19,7 +19,7 @@ if __name__ == "__main__":
     r = requests.request("GET", url)
 
     # write into files
-    p = Path(f"{args.year}/{args.day}")
+    p = Path(f"{args.year}/{args.day:02}")
     p.mkdir(parents=True, exist_ok=True)
 
     (p / "problem.md").write_text(md(r.text))
