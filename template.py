@@ -1,4 +1,15 @@
 # imports
+import re
+import json
+from itertools import (
+    combinations,
+    permutations,
+    zip_longest,
+    accumulate,
+    combinations_with_replacement,
+)
+from collections import defaultdict, Counter
+from functools import reduce, lru_cache, partial
 
 ###
 test_txt = open("test.txt").read()
@@ -13,7 +24,7 @@ print(f"read {len(input_txt.splitlines())} lines")
 def prepare(inp):
     lines = inp.splitlines()
     # UPDATE
-    out = [l for l in lines]
+    out = [ln for ln in lines]
     return out
 
 
