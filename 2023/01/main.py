@@ -1,56 +1,82 @@
-# imports
+### imports
+from contextlib import contextmanager
+from datetime import datetime
+
 import re
-import json
-from itertools import (
-    combinations,
-    permutations,
-    zip_longest,
-    accumulate,
-    combinations_with_replacement,
-)
-from collections import defaultdict, Counter
-from functools import reduce, lru_cache, partial
 
-###
+# import json
+# from itertools import (
+#     combinations,
+#     permutations,
+#     zip_longest,
+#     accumulate,
+#     combinations_with_replacement,
+# )
+# from collections import defaultdict, Counter
+# from functools import reduce, lru_cache, partial
+#
+# import sys
+# sys.path.append('../..')
+# import util
+
+### read files
 test_txt = open("test.txt").read()
-
+test_lines = test_txt.splitlines()
+print(f"read {len((test_lines))} test lines")
 input_txt = open("input.txt").read()
-print(f"read {len(input_txt.splitlines())} lines")
-###
-# read util functions
+input_lines = input_txt.splitlines()
+print(f"read {len((input_lines))} lines")
+
+### timing funcs
 
 
-###
-def prepare(inp):
-    lines = inp.splitlines()
-    # UPDATE
-    out = []
-    for l in lines:
-        print(l)
-        for c in l:
-            if c.isdigit():
-                tmp = c
-                break
-        for c in reversed(l):
-            if c.isdigit():
-                out.append(int(tmp + c))
-                break
+@contextmanager
+def timed():
+    start_time = datetime.now()
+    yield
+    print(f"took {datetime.now() - start_time}")
 
+
+### read functions
+def parse_all_lines(lines: list[str], func):
+    out = [func(line) for line in lines]
     return out
 
 
-teststart = prepare(test_txt)
-start = prepare(input_txt)
 ###
-# util functions
+pattern = re.compile(r"(\d).*(\d)|(\d)")
+
+
+def parse_line(line: str):
+    matches = pattern.search(line)
+    assert matches
+    a, b, c = matches.groups()
+    if not a:
+        return int(c + c)
+    return int(a + b)
+
+
+with timed():
+    teststart = parse_all_lines(test_lines, parse_line)
+    start = parse_all_lines(input_lines, parse_line)
+### util functions
+
+### main
+sum(start)
 
 ###
-# main
-start
+# PART 2
 ###
-sum(start)
-###
-nums = {
+# change parse_line if necessary
+test_lines2 = """two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen""".splitlines()
+
+numsdict = {
     "one": "1",
     "two": "2",
     "three": "3",
@@ -61,58 +87,27 @@ nums = {
     "eight": "8",
     "nine": "9",
 }
-
-
-def prepare(inp):
-    lines = inp.splitlines()
-    # UPDATE
-    out = []
-
-    for l in lines:
-        print(l)
-        tmp = ""
-        for i in range(len(l)):
-            c = l[i]
-            if c.isdigit():
-                print("caught digit start", c)
-                tmp = c
-                break
-            else:
-                for k, v in nums.items():
-                    if l[i:].startswith(k):
-                        tmp = v
-                        break
-                if tmp:
-                    break
-
-        for i in range(len(l)):
-            c = l[-i - 1]
-            if c.isdigit():
-                print("caught digit end")
-                out.append(int(tmp + c))
-                break
-            else:
-                ext = False
-                for k, v in nums.items():
-                    if l[-i - 1 :].startswith(k):
-                        out.append(int(tmp + v))
-                        ext = True
-                        break
-                if ext:
-                    break
-
-        print(out[-1])
-
-    return out
-
-
-teststart = prepare(test_txt)
-start = prepare(input_txt)
+nums = "|".join(numsdict.keys())
 ###
-# util functions
 
+pattern = re.compile(rf"({nums}|\d).*({nums}|\d)|({nums}|\d)")
+
+
+def parse_line_2(line: str):
+    matches = pattern.search(line)
+    assert matches
+    groups = list(matches.groups())
+    for i, v in enumerate(groups):
+        if v and not v.isdigit():
+            groups[i] = numsdict[v]
+    a, b, c = groups
+    if not a:
+        return int(c + c)
+    return int(a + b)
+
+
+with timed():
+    teststart = parse_all_lines(test_lines2, parse_line_2)
+    start = parse_all_lines(input_lines, parse_line_2)
 ###
-# main
 sum(start)
-###
-sum(teststart)
