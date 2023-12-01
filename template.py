@@ -1,4 +1,7 @@
 ### imports
+from contextlib import contextmanager
+from datetime import datetime
+
 # import re
 # import json
 # from itertools import (
@@ -22,6 +25,15 @@ print(f"read {len((test_lines))} test lines")
 input_txt = open("input.txt").read()
 input_lines = input_txt.splitlines()
 print(f"read {len((input_lines))} lines")
+
+### timing funcs
+
+
+@contextmanager
+def timed():
+    start_time = datetime.now()
+    yield
+    print(f"took {datetime.now() - start_time}")
 
 
 ### read functions
