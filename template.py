@@ -18,7 +18,8 @@ from collections import defaultdict, Counter
 from functools import reduce, lru_cache, partial
 import operator as op
 
-from util import get_adjacent, iden_cross
+from grid_utils import get_adjacent, hgrow, vgrow
+from graph_utils import iden_cross
 from algs import dijkstra, floyd_warshall
 
 ### read files
