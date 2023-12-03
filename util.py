@@ -1,6 +1,6 @@
 from contextlib import contextmanager
 from datetime import datetime
-from typing import Any
+from typing import Any, Callable
 
 # types
 Graph = dict[Any, dict[Any, float]]
@@ -46,6 +46,39 @@ def get_adjacent(
                 continue
 
             yield (i2, j2), grid[i2][j2]
+
+
+def hgrow(
+    grid: list,
+    coord: tuple[int, int],
+    criteria: Callable[[Any], bool],
+):
+    i, j = coord
+    line = grid[i]
+    len_j = len(grid[0])
+    assert 0 <= j < len_j, f"{j=} coord outside of range"
+    jl, jr = j, j
+    while jl - 1 >= 0 and criteria(line[jl - 1]):
+        jl -= 1
+    while jr + 1 < len_j and criteria(line[jr + 1]):
+        jr += 1
+    return (i, jl), (i, jr)
+
+
+def vgrow(
+    grid: list,
+    coord: tuple[int, int],
+    criteria: Callable[[Any], bool],
+):
+    i, j = coord
+    len_i = len(grid)
+    assert 0 <= i < len_i, f"{i=} coord outside of range"
+    il, ir = i, i
+    while il - 1 >= 0 and criteria(grid[il - 1][j]):
+        il -= 1
+    while ir + 1 < len_i and criteria(grid[ir + 1][j]):
+        ir += 1
+    return (il, j), (ir, j)
 
 
 ###
