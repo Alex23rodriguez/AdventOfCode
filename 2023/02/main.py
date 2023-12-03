@@ -6,21 +6,8 @@ from util import timed
 
 from pathlib import Path
 
-import re
-import json
-from itertools import (
-    combinations,
-    permutations,
-    zip_longest,
-    accumulate,
-    combinations_with_replacement,
-)
-from collections import defaultdict, Counter
-from functools import reduce, lru_cache, partial
-from operator import mul
-
-from util import iden_cross
-from algs import dijkstra, floyd_warshall
+from functools import reduce
+import operator as op
 
 ### read files
 test_txt = Path("test.txt").read_text()
@@ -118,7 +105,7 @@ for clrs in teststart:
 
 
 ###
-ps = [reduce(mul, m.values()) for m in mins]
+ps = [reduce(op.mul, m.values()) for m in mins]
 ps
 ###
 sum(ps)
@@ -138,7 +125,7 @@ for clrs in start:
 
 
 ###
-ps = [reduce(mul, m.values()) for m in mins]
+ps = [reduce(op.mul, m.values()) for m in mins]
 ps
 ###
-sum([reduce(mul, m.values()) for m in mins])
+sum([reduce(op.mul, m.values()) for m in mins])
