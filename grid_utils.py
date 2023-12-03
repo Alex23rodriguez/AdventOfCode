@@ -65,3 +65,10 @@ def vgrow(
     while ir + 1 < len_i and criteria(grid[ir + 1][j]):
         ir += 1
     return (il, j), (ir, j)
+
+
+def get_from_grid(grid: list, criteria: Callable[[Any], bool]):
+    for i, line in enumerate(grid):
+        for j, val in enumerate(line):
+            if criteria(val):
+                yield (i, j), val

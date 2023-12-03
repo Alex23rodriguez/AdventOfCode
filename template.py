@@ -18,7 +18,7 @@ from collections import defaultdict, Counter
 from functools import reduce, lru_cache, partial
 import operator as op
 
-from grid_utils import get_adjacent, hgrow, vgrow
+from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
 from graph_utils import iden_cross
 from algs import dijkstra, floyd_warshall
 
