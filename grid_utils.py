@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Generator
 
 
 def get_adjacent(
@@ -7,7 +7,7 @@ def get_adjacent(
     diag=True,
     center=False,
     criteria: Callable[[Any], bool] = lambda _: True,
-):
+) -> Generator[tuple[tuple[int, int], Any], None, None]:
     i, j = coord
     len_i, len_j = len(grid), len(grid[0])
     assert 0 <= i < len_i, f"{i=} coord outside of range"
