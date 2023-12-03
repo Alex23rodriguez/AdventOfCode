@@ -10,6 +10,54 @@ def get_adjacent(
     vwrap=False,
     criteria: Callable[[Any], bool] = lambda _: True,
 ) -> Generator[tuple[tuple[int, int], Any], None, None]:
+    """
+    retrieves the (coord, value) pair of all coords adjacent to the given coord.
+    note that order is not guaranteed.
+
+    params:
+        grid: a 2 dimensional, rectangular
+        coord: the initial coordenate
+        diag: whether to also include the diagonals default True
+        center: whether to also include the given coord. default False
+        hwrap: whether to wrap around the edge of the grid horizontally. default False
+        vwrap: whether to wrap around the edge of the grid vertically. default False
+        criteria: a filter function that the values must satisfy. defaults to all values accepted
+
+    examples:
+               12345
+        grid = abcde
+               ABCDE
+
+        # all defaults
+                          234
+        coord = (1, 2) -> b d
+                          BCD
+
+        coord = (2, 0) -> ab
+                           B
+
+        # diag=False
+                           3
+        coord = (1, 2) -> b d
+                           C
+
+        # diag=False, center=True
+
+        coord = (0, 2) -> 234
+                           c
+
+        # diag=True, center=True, hwrap=True
+
+
+        cord = (0, 4) -> 451
+                         dea
+
+        # center=True, criteria=lambda x: x.lower() != 'a' and (x not in "12345" or int(x) < 3)
+
+                          12
+        coord = (1, 1) ->  bc
+                           BC
+    """
     i, j = coord
     len_i, len_j = len(grid), len(grid[0])
     assert 0 <= i < len_i, f"{i=} coord outside of range"
@@ -59,6 +107,7 @@ def hgrow(
     coord: tuple[int, int],
     criteria: Callable[[Any], bool],
 ):
+    """given a coordenate, return the the left-right coordenates after expanding horizontally from coord while criteria is True."""
     i, j = coord
     line = grid[i]
     len_j = len(grid[0])
@@ -76,6 +125,7 @@ def vgrow(
     coord: tuple[int, int],
     criteria: Callable[[Any], bool],
 ):
+    """same as hgrow, but vertical"""
     i, j = coord
     len_i = len(grid)
     assert 0 <= i < len_i, f"{i=} coord outside of range"
@@ -88,6 +138,7 @@ def vgrow(
 
 
 def get_from_grid(grid: list, criteria: Callable[[Any], bool]):
+    """retrieve all (coord, val) pairs that fulfill a certain criteria"""
     for i, line in enumerate(grid):
         for j, val in enumerate(line):
             if criteria(val):
