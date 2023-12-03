@@ -3,7 +3,6 @@ import sys
 
 sys.path.append("../..")
 from util import timed
-
 from pathlib import Path
 
 import re
@@ -19,7 +18,7 @@ from collections import defaultdict, Counter
 from functools import reduce, lru_cache, partial
 import operator as op
 
-from util import iden_cross
+from util import get_adjacent, iden_cross
 from algs import dijkstra, floyd_warshall
 
 ### read files

@@ -14,6 +14,40 @@ def timed():
     print(f"took {datetime.now() - start_time}")
 
 
+### grid helpers
+def get_adjacent(
+    grid: list,
+    coord: tuple[int, int],
+    diag=True,
+    center=False,
+):
+    i, j = coord
+    len_i, len_j = len(grid), len(grid[0])
+    assert 0 <= i < len_i, f"{i=} coord outside of range"
+    assert 0 <= j < len_j, f"{j=} coord outside of range"
+
+    if diag:
+        for i2 in (i - 1, i, i + 1):
+            if i2 < 0 or i2 == len_i:
+                continue
+            for j2 in (j - 1, j, j + 1):
+                if j2 < 0 or j2 == len_j:
+                    continue
+                if not center and i2 == i and j2 == j:
+                    continue
+                yield (i2, j2), grid[i2][j2]
+    else:
+        if center:
+            yield (i, j), grid[i][j]
+        for i2, j2 in ((i - 1, j), (i, j - 1), (i, j + 1), (i + 1, j)):
+            if i2 < 0 or i2 == len_i:
+                continue
+            if j2 < 0 or j2 == len_j:
+                continue
+
+            yield (i2, j2), grid[i2][j2]
+
+
 ###
 def iden_cross(d) -> Graph:
     G = {}
