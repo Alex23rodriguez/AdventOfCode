@@ -6,6 +6,7 @@ def get_adjacent(
     coord: tuple[int, int],
     diag=True,
     center=False,
+    criteria: Callable[[Any], bool] = lambda _: True,
 ):
     i, j = coord
     len_i, len_j = len(grid), len(grid[0])
@@ -21,7 +22,9 @@ def get_adjacent(
                     continue
                 if not center and i2 == i and j2 == j:
                     continue
-                yield (i2, j2), grid[i2][j2]
+                val = grid[i2][j2]
+                if criteria(val):
+                    yield (i2, j2), grid[i2][j2]
     else:
         if center:
             yield (i, j), grid[i][j]
@@ -31,7 +34,9 @@ def get_adjacent(
             if j2 < 0 or j2 == len_j:
                 continue
 
-            yield (i2, j2), grid[i2][j2]
+            val = grid[i2][j2]
+            if criteria(val):
+                yield (i2, j2), grid[i2][j2]
 
 
 def hgrow(
