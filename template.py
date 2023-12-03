@@ -17,6 +17,7 @@ from itertools import (
 )
 from collections import defaultdict, Counter
 from functools import reduce, lru_cache, partial
+import operator as op
 
 from util import iden_cross
 from algs import dijkstra, floyd_warshall
