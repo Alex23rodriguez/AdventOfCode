@@ -16,7 +16,7 @@ window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&
 * [[Events]](/2023/events)
 * [[Shop]](https://teespring.com/stores/advent-of-code)
 * [[Log In]](/2023/auth/login)
-   0x0000|[2023](/2023)
+   <y>[2023](/2023)</y>
 =======================
 
 * [[Calendar]](/2023)
@@ -26,7 +26,7 @@ window.addEventListener('click', function(e,s,r){if(e.target.nodeName==='CODE'&&
 * [[Stats]](/2023/stats)
 
 
-Our [sponsors](/2023/sponsors) help make Advent of Code possible:[Jane Street](https://www.janestreet.com/) - Will our next great idea come from you? We hire smart, humble people who love to solve problems, build systems, and test theories. Our success is driven by our people and we never stop improving.
+Our [sponsors](/2023/sponsors) help make Advent of Code possible:[Hetzner](https://www.hetzner.com/cloud?mtm_campaign=adventofcode23&mtm_source=adventofcode&mtm_medium=sponsoring_link) - Create your server in seconds & bring your coding vision to life!
 
 
 --- Day 6: Wait For It ---
@@ -78,7 +78,7 @@ So, because the first race lasts 7 milliseconds, you only have a few options:
 * Hold the button for *`4` milliseconds*. After its remaining 3 milliseconds of travel time, the boat will have gone *`12` millimeters*.
 * Hold the button for *`5` milliseconds*, causing the boat to travel a total of *`10` millimeters*.
 * Hold the button for *`6` milliseconds*, causing the boat to travel a total of *`6` millimeters*.
-* Hold the button for *`7` milliseconds*. That's the entire duration of the race. You never let go of the button. The boat can't move until you let you of the button. Please make sure you let go of the button so the boat gets to move. *`0` millimeters*.
+* Hold the button for *`7` milliseconds*. That's the entire duration of the race. You never let go of the button. The boat can't move until you let go of the button. Please make sure you let go of the button so the boat gets to move. *`0` millimeters*.
 
 
 Since the current record for this race is `9` millimeters, there are actually `*4*` different ways you could win: you could hold the button for `2`, `3`, `4`, or `5` milliseconds at the start of the race.
