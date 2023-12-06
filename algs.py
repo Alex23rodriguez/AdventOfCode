@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from util import Graph
+from graph_utils import Graph
 
 
 ### algs
