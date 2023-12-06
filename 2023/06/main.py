@@ -1,0 +1,93 @@
+### imports
+import sys
+
+sys.path.append("../..")
+from util import timed
+from pathlib import Path
+
+import re
+import json
+from itertools import (
+    combinations,
+    permutations,
+    zip_longest,
+    accumulate,
+    combinations_with_replacement,
+)
+from collections import defaultdict, Counter
+from functools import reduce, lru_cache, partial
+import operator as op
+
+from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
+from graph_utils import iden_cross
+
+# from algs import dijkstra, floyd_warshall
+
+### read files
+test_txt = Path("test.txt").read_text()
+test_lines = test_txt.splitlines()
+print(f"read {len((test_lines))} test lines")
+input_txt = Path("input.txt").read_text()
+input_lines = input_txt.splitlines()
+print(f"read {len((input_lines))} lines")
+
+
+### read functions
+def parse_all_lines(lines: list[str]):
+    t = list(map(int, lines[0].split()[1:]))
+    d = list(map(int, lines[1].split()[1:]))
+    return t, d
+
+
+with timed():
+    teststart = parse_all_lines(test_lines)
+    start = parse_all_lines(input_lines)
+
+### main
+ans = []
+for t, d in zip(*teststart):
+    a = 0
+    for i in range(1, t):
+        # print((t-i)*i)
+        if (t - i) * i > d:
+            a += 1
+    ans.append(a)
+###
+reduce(op.mul, ans)
+###
+ans = []
+for t, d in zip(*start):
+    a = 0
+    for i in range(1, t):
+        # print((t-i)*i)
+        if (t - i) * i > d:
+            a += 1
+    ans.append(a)
+###
+reduce(op.mul, ans)
+
+
+###
+# PART 2
+###
+p = Path("test2.txt")
+if p.exists():
+    test_txt = p.read_text()
+    test_lines = test_txt.splitlines()
+
+
+### util defenitions
+
+
+### parse input - cange parse_line if necessary
+# change parse_line if necessary
+def parse_line_2(line: str):
+    # TODO
+    return line
+
+
+with timed():
+    teststart = parse_all_lines(test_lines, parse_line_2)
+    start = parse_all_lines(input_lines, parse_line_2)
+
+### main
