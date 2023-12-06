@@ -18,6 +18,20 @@ from collections import defaultdict, Counter
 from functools import reduce, lru_cache, partial
 import operator as op
 
+from more_itertools import (
+    chunked,
+    sliced,
+    distribute,
+    split_at,
+    split_into,
+    split_when,
+    bucket,
+    windowed,
+    distinct_permutations,
+    distinct_combinations,
+    locate,
+)
+
 from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
 from graph_utils import iden_cross
 from algs import dijkstra, floyd_warshall
