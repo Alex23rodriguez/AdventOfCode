@@ -71,8 +71,8 @@ def cmprank(c1, c2):
 ### parse input
 def parse_line(line: str):
     h, bid = line.split()
-    hs = sorted(h, reverse=True, key=cmp_to_key(cmprank))
-    return Counter(hs), int(bid), h, "".join(hs)
+    # hs = sorted(h, reverse=True, key=cmp_to_key(cmprank))
+    return Counter(h), int(bid), h
 
 
 with timed():
@@ -114,7 +114,7 @@ def cmp(pair1, pair2):
         return 1
     if s1 < s2:
         return -1
-    for (c1, _), (c2, _) in zip(h1.most_common(), h2.most_common()):
+    for c1, c2 in zip(pair1[2], pair2[2]):
         a = rank(c1)
         b = rank(c2)
         if a > b:
@@ -127,7 +127,7 @@ def cmp(pair1, pair2):
 ###
 ans = sorted(teststart, key=cmp_to_key(cmp))
 ###
-sum([i * b for i, (_, b, _, _) in enumerate(ans, 1)])
+sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
 ###
 ans[:30]
 ###
@@ -137,9 +137,10 @@ ans = sorted(start, key=cmp_to_key(cmp))
 ###
 ans[-30:]
 ###
-sum([i * b for i, (_, b, _, _) in enumerate(ans, 1)])
+sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
 
 # not 245611292
+# not 246222144
 ###
 # PART 2
 ###
