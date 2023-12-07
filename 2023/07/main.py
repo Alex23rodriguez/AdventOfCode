@@ -5,36 +5,8 @@ sys.path.append("../..")
 from util import timed
 from pathlib import Path
 
-import re
-import json
-from itertools import (
-    combinations,
-    permutations,
-    zip_longest,
-    accumulate,
-    combinations_with_replacement,
-)
-from collections import defaultdict, Counter
-from functools import reduce, lru_cache, partial, cmp_to_key
-import operator as op
-
-from more_itertools import (
-    chunked,
-    sliced,
-    distribute,
-    split_at,
-    split_into,
-    split_when,
-    bucket,
-    windowed,
-    distinct_permutations,
-    distinct_combinations,
-    locate,
-)
-
-from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
-from graph_utils import iden_cross
-from algs import dijkstra, floyd_warshall
+from collections import Counter
+from functools import cmp_to_key
 
 ### read files
 test_txt = Path("test.txt").read_text()
@@ -59,19 +31,9 @@ def rank(c):
     return "23456789TJQKA".index(c)
 
 
-def cmprank(c1, c2):
-    r1, r2 = rank(c1), rank(c2)
-    if r1 < r2:
-        return -1
-    if r1 > r2:
-        return 1
-    return 0
-
-
 ### parse input
 def parse_line(line: str):
     h, bid = line.split()
-    # hs = sorted(h, reverse=True, key=cmp_to_key(cmprank))
     return Counter(h), int(bid), h
 
 

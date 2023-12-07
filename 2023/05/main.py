@@ -1,29 +1,11 @@
 ### imports
-from copy import deepcopy
 import sys
 
 sys.path.append("../..")
 from util import timed
 from pathlib import Path
 
-import re
-import json
-from itertools import (
-    combinations,
-    permutations,
-    zip_longest,
-    accumulate,
-    combinations_with_replacement,
-)
 from more_itertools import chunked
-from collections import defaultdict, Counter
-from functools import reduce, lru_cache, partial
-import operator as op
-
-from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
-from graph_utils import iden_cross
-
-# from algs import dijkstra, floyd_warshall
 
 ### read files
 test_txt = Path("test.txt").read_text()
