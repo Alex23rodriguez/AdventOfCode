@@ -79,12 +79,6 @@ with timed():
     teststart = parse_all_lines(test_lines, parse_line)
     start = parse_all_lines(input_lines, parse_line)
 
-###
-h = teststart[0][0]
-sorted(h.values())
-###
-max(teststart[0][0].values())
-
 
 ### main
 def get_hand(h: Counter):
@@ -107,6 +101,7 @@ def get_hand(h: Counter):
 ###
 
 
+# compare hands function
 def cmp(pair1, pair2):
     h1, h2 = pair1[0], pair2[0]
     s1, s2 = get_hand(h1), get_hand(h2)
@@ -124,44 +119,61 @@ def cmp(pair1, pair2):
     return 0
 
 
-###
+## TEST
 ans = sorted(teststart, key=cmp_to_key(cmp))
-###
-sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
-###
-ans[:30]
-###
-get_hand(Counter("A1AA1"))
-###
-ans = sorted(start, key=cmp_to_key(cmp))
-###
-ans[-30:]
-###
 sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
 
-# not 245611292
-# not 246222144
+## INPUT
+ans = sorted(start, key=cmp_to_key(cmp))
+sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
+
+
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
+def rank(c):
+    return "J23456789TQKA".index(c)
 
 
-### util defenitions
+def get_hand(h: Counter):
+    st = h.most_common()
+    js = h["J"]
+
+    if len(st) == 1:  # five of a kind
+        return 6
+
+    # scoot over best cards if J is among them
+    (c1, n1), (c2, n2) = st[0], st[1]
+    if len(st) == 2:
+        if c1 == "J" or c2 == "J":
+            return 6
+    else:
+        (c3, n3) = st[2]
+        if c1 == "J":
+            c1, n1 = c2, n2
+            c2, n2 = c3, n3
+        elif c2 == "J":
+            c2, n2 = c3, n3
+
+    if n1 + js == 5:  # five of a kind
+        return 6
+    if n1 + js == 4:  # four of a kind
+        return 5
+    if n1 + js == 3:
+        if n2 == 2:  # full house
+            return 4
+        return 3  # three of a kind
+    if n1 + js == 2:
+        if n2 == 2:
+            return 2
+        return 1
+    return 0
 
 
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
-def parse_line_2(line: str):
-    # TODO
-    return line
+## TEST
+ans = sorted(teststart, key=cmp_to_key(cmp))
+sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
 
-
-with timed():
-    teststart = parse_all_lines(test_lines, parse_line_2)
-    start = parse_all_lines(input_lines, parse_line_2)
-
-### main
+## INPUT
+ans = sorted(start, key=cmp_to_key(cmp))
+sum([i * b for i, (_, b, _) in enumerate(ans, 1)])
