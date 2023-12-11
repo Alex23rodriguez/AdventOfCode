@@ -4,6 +4,7 @@ import sys
 sys.path.append("../..")
 from util import timed
 from pathlib import Path
+from copy import deepcopy
 
 import re
 import json
