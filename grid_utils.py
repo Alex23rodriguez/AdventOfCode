@@ -143,3 +143,7 @@ def get_from_grid(grid: list, criteria: Callable[[Any], bool]):
         for j, val in enumerate(line):
             if criteria(val):
                 yield (i, j), val
+
+
+def manhattan_dist(c1, c2):
+    return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1])
