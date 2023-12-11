@@ -4,6 +4,7 @@ import sys
 sys.path.append("../..")
 from util import timed
 from pathlib import Path
+from copy import deepcopy
 
 import re
 import json
@@ -32,7 +33,7 @@ from more_itertools import (
     locate,
 )
 
-from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid
+from grid_utils import get_adjacent, hgrow, vgrow, get_from_grid, manhattan_dist
 from graph_utils import iden_cross
 from algs import dijkstra, floyd_warshall
 
@@ -47,48 +48,79 @@ print(f"read {len((input_lines))} lines")
 
 ### read functions
 def parse_all_lines(lines: list[str], func):
-    for i in range(len(lines)):
-        if "#" not in lines[-i - 1]:
-            lines.insert(-i, lines[-i - 1])
-    return out
+    i = 0
+    while i < len(lines):
+        if "#" not in lines[i]:
+            lines.insert(i, lines[i])
+            i += 1
+        i += 1
+
+    lines = ["".join(ln) for ln in zip(*lines)]
+
+    i = 0
+    while i < len(lines):
+        if "#" not in lines[i]:
+            lines.insert(i, lines[i])
+            i += 1
+        i += 1
+
+    lines = ["".join(ln) for ln in zip(*lines)]
+    return lines
 
 
-### util defenitions
-
-
-### parse input
 def parse_line(line: str):
     return line
 
 
 with timed():
-    teststart = parse_all_lines(test_lines, parse_line)
-    start = parse_all_lines(input_lines, parse_line)
+    teststart = parse_all_lines(deepcopy(test_lines), parse_line)
+    start = parse_all_lines(deepcopy(input_lines), parse_line)
 
 ### main
+# grid = teststart
+grid = start
+###
+galx = [c for c, _ in get_from_grid(grid, lambda x: x == "#")]
+###
+ans = []
+for x, y in combinations(galx, 2):
+    ans.append(manhattan_dist(x, y))
+###
+sum(ans)
 
 
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
-
-
-### util defenitions
-
-
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
-def parse_line_2(line: str):
-    # TODO
-    return line
-
-
 with timed():
-    teststart = parse_all_lines(test_lines, parse_line_2)
-    start = parse_all_lines(input_lines, parse_line_2)
+    teststart = deepcopy(test_lines)
+    start = deepcopy(input_lines)
 
 ### main
+grid = start
+galx = [c for c, _ in get_from_grid(grid, lambda x: x == "#")]
+###
+empty_rows = [i for i, ln in enumerate(grid) if "#" not in ln]
+empty_cols = [i for i, ln in enumerate(zip(*grid)) if "#" not in ln]
+
+
+###
+def manhattan_dist_mod(c1, c2):
+    dist = abs(c1[0] - c2[0]) + abs(c1[1] - c2[1])
+    for r in empty_rows:
+        if min(c1[0], c2[0]) < r < max(c1[0], c2[0]):
+            dist += 999_999
+    for c in empty_cols:
+        if min(c1[1], c2[1]) < c < max(c1[1], c2[1]):
+            dist += 999_999
+    return dist
+
+
+###
+
+ans = []
+for x, y in combinations(galx, 2):
+    ans.append(manhattan_dist_mod(x, y))
+    # print(x,y, ans[-1])
+
+sum(ans)
