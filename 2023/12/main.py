@@ -118,7 +118,7 @@ ans = [num_fits(s, lst) for s, lst in teststart]
 with timed():
     ans = [num_fits(s, lst) for s, lst in start]
 ###
-sum(ans)
+sum(ans)  # 7260
 
 ###
 # PART 2
@@ -135,8 +135,8 @@ if p.exists():
 ### parse input - cange parse_line if necessary
 # change parse_line if necessary
 def parse_line_2(line: str):
-    # TODO
-    return line
+    a, b = line.split()
+    return f"{a}.{a}.{a}", list(map(int, b.split(","))) * 3
 
 
 with timed():
@@ -144,3 +144,8 @@ with timed():
     start = parse_all_lines(input_lines, parse_line_2)
 
 ### main
+
+with timed():
+    ans = [num_fits(s, lst) for s, lst in start]
+
+    print(sum(ans))  # 21374318
