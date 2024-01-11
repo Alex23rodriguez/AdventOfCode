@@ -103,24 +103,38 @@ len(set(v[0] for v in visited))  # 6740
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
+grid = start
 
+m = len(grid)
+n = len(grid[0])
 
-### util defenitions
+initial_beams = []
+# left and right beams
+for i in range(m):
+    initial_beams.append(((i, 0), R))
+    initial_beams.append(((i, n - 1), L))
+# top and bottom beams
+for j in range(n):
+    initial_beams.append(((0, j), D))
+    initial_beams.append(((m - 1, j), U))
 
+###
+ans = 0
+for init in initial_beams:
+    beams: list[BeamType] = [init]
+    visited: set[BeamType] = set(beams)
 
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
-def parse_line_2(line: str):
-    # TODO
-    return line
+    while beams:
+        p, d = beams.pop()
+        nbms = new_beams(p, d, grid[p[0]][p[1]])
+        # print("--------")
+        # print(p, d)
+        # print(nbms)
+        for beam in new_beams(p, d, grid[p[0]][p[1]]):
+            if beam in visited:
+                continue
+            visited.add(beam)
+            beams.append(beam)
 
-
-with timed():
-    teststart = parse_all_lines(test_lines, parse_line_2)
-    start = parse_all_lines(input_lines, parse_line_2)
-
-### main
+    ans = max(ans, len(set(v[0] for v in visited)))
+print(ans)
