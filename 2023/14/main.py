@@ -44,20 +44,21 @@ with timed():
 
 ### util defenitions
 def tilt(grid, direction: str):
-    if direction == "E":
-        return tilt_east(grid)
     if direction == "W":
-        ans = tilt_east([row[::-1] for row in grid])
+        return tilt_west(grid)
+    if direction == "E":
+        ans = tilt_west([row[::-1] for row in grid])
         return ["".join(row[::-1]) for row in ans]
     if direction == "N":
-        ans = tilt_east(list(zip(*grid)))
+        ans = tilt_west(list(zip(*grid)))
         return ["".join(a) for a in zip(*ans)]
     if direction == "S":
-        ans = tilt_east(list(zip(*grid[::-1])))
+        ans = tilt_west(list(zip(*grid[::-1])))
         return ["".join(a) for a in zip(*ans)][::-1]
+    assert False, "invalid direction"
 
 
-def tilt_east(grid: list[str]) -> list[str]:
+def tilt_west(grid: list[str]) -> list[str]:
     ans = []
     for row in grid:
         row = "".join(row)
@@ -87,24 +88,46 @@ calc_load(ngrid)  # 106990
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
 
-
-### util defenitions
-
-
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
-def parse_line_2(line: str):
-    # TODO
-    return line
-
-
-with timed():
-    teststart = parse_all_lines(test_lines, parse_line_2)
-    start = parse_all_lines(input_lines, parse_line_2)
 
 ### main
+def cycle(grid) -> list[str]:
+    grid = tilt(grid, "N")
+    grid = tilt(grid, "W")
+    grid = tilt(grid, "S")
+    grid = tilt(grid, "E")
+    return grid
+
+
+###
+cycle_dict = {}
+loop_start = None
+loop_len = None
+
+grid = start
+for i in range(1, 1000):
+    grid = cycle(grid)
+    k = tuple(grid)
+    if k not in cycle_dict:
+        cycle_dict[k] = i
+    else:
+        loop_start = cycle_dict[k]
+        loop_len = i - loop_start
+        break
+
+assert loop_len
+print(loop_start, loop_len)
+###
+
+n = 1000000000
+
+index = n % loop_len
+while index < loop_start:
+    index += loop_len
+print(index)
+
+###
+for k, v in cycle_dict.items():
+    if v == index:
+        print(calc_load(k))
+        break
