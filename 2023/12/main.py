@@ -70,6 +70,7 @@ with timed():
 
 
 ### util
+@lru_cache(4096)
 def split_at_possible(s: str, n: int):
     leftovers = []
     for i, w in enumerate(windowed(s, n)):
@@ -86,7 +87,8 @@ def split_at_possible(s: str, n: int):
 
 
 ###
-def num_fits(s: str, lst: list[int]):
+@lru_cache(4096)
+def num_fits(s: str, lst: tuple[int]):
     if len(lst) == 0:
         if "#" in s:
             return 0
@@ -113,30 +115,20 @@ def num_fits(s: str, lst: list[int]):
 
 
 ## main
-ans = [num_fits(s, lst) for s, lst in teststart]
+ans = [num_fits(s, tuple(lst)) for s, lst in teststart]
+sum(ans)
 ###
 with timed():
-    ans = [num_fits(s, lst) for s, lst in start]
-###
+    ans = [num_fits(s, tuple(lst)) for s, lst in start]
 sum(ans)  # 7260
+
 
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
-
-
-### util defenitions
-
-
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
 def parse_line_2(line: str):
     a, b = line.split()
-    return f"{a}.{a}.{a}", list(map(int, b.split(","))) * 3
+    return f"{a}?{a}?{a}?{a}?{a}", list(map(int, b.split(","))) * 5
 
 
 with timed():
@@ -146,6 +138,5 @@ with timed():
 ### main
 
 with timed():
-    ans = [num_fits(s, lst) for s, lst in start]
-
-    print(sum(ans))  # 21374318
+    ans = [num_fits(s, tuple(lst)) for s, lst in start]
+    print(sum(ans))
