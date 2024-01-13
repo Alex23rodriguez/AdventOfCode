@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("../..")
 
 from copy import deepcopy
@@ -6,7 +7,7 @@ from pprint import pprint
 
 from util import timed
 
-TEST = True
+TEST = False
 
 with open("test.txt" if TEST else "input.txt") as f:
     input_str = f.read()
@@ -114,8 +115,10 @@ def cumulate_per_tile(coords) -> dict[tuple[int, int], list[tuple[int, int]]]:
 
 ###
 
+
 def check_diff_repeats(diff):
     return all(x == y for x, y in diff.values())
+
 
 with timed():
     total_steps = 100
@@ -128,7 +131,7 @@ with timed():
 
     cycle_len = len(grid)
 
-    cycle_diff: dict[int, tuple[int, int]] = { i: (0,0) for i in range(cycle_len) }
+    cycle_diff: dict[int, tuple[int, int]] = {i: (0, 0) for i in range(cycle_len)}
     n_seen = {0: 1}
 
     step = 1
@@ -145,8 +148,7 @@ with timed():
 
         new_at_time[step] = frozenset(new)
 
-
-        t = step%(cycle_len)
+        t = step % (cycle_len)
         n_seen[step] = len(new)
 
         prev = n_seen.get(step - cycle_len, 0)
@@ -155,34 +157,71 @@ with timed():
 
         if check_diff_repeats(cycle_diff):
             start_step = step
-            print(f"repeats at step {step}!")
-            break
-        
+            # print(f"repeats at step {step}!")
+            if step % cycle_len != 0:
+                break
+
         # update condition
         seen_last_step = new
         step += 1
 
 assert start_step
 diffs = {i: v[0] for i, v in cycle_diff.items()}
-# start_seen = 
+# start_seen =
 total_diffs = sum(diffs.values())
 print("done!")
 ###
+###
+ori_deltas = {}
+for k, v in n_seen.items():
+    ori_deltas[k % cycle_len] = v
+
+
+###
 def calc_total_at_step(t):
+    deltas = ori_deltas.copy()
     ans = 0
-    deltas = 
     s = t % 2
     while s <= t and s <= start_step:
         ans += n_seen[s]
         s += 2
 
-    for i in range(s, t + 1, 2):
+    for i in range(s, t + 1):
         mod_cyc = i % cycle_len
-        deltas[i] += diffs[mod_cyc]
-        ans += deltas[mod_cyc]
+        deltas[mod_cyc] += diffs[mod_cyc]
+        if i % 2 == t % 2:
+            ans += deltas[mod_cyc]
+    # print(deltas)
 
-    print(delta)
     return ans
 
+
 ###
-calc_total_at_step(72)
+calc_total_at_step(1501)
+###
+calc_total_at_step(26501365)
+###
+
+# 301 should be 80393
+# 393 should be 137251
+# 394 should be 137941
+# 395 should be 138646
+# 501 should be 223099 - y
+# 511 should be 231968
+# 523 should be 242844 - y
+# 524 should be 243725 - y
+# 525 should be 244644 - n
+# 555 should be 273035
+# 575 should be 292933
+# 597 should be 316632
+# 599 should be 318735
+# 600 should be 320063
+# 601 should be 320862
+# 701 should be 435352
+# 1501 should be 1994650
+###
+# 621289877470248 is too low with 26501365 ?
+# 621289922886149 is CORRECT
+# 621289980339493 is too high with 26501366
+
+# 621336755020852 is too high
