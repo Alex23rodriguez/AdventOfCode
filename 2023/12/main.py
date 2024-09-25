@@ -115,29 +115,15 @@ def get_num(s: str, b: tuple[int]):
 
     and_num = int(s.replace(".", "0").replace("?", "0").replace("#", "1"), 2)  # used to check that every # is covered
     zand_num = int(s.replace(".", "1").replace("?", "0").replace("#", "0"), 2)  # used to check that every . is empty
-    print(f"{bin(and_num)=:>16}")
-    print(f"{bin(zand_num)=:>15}")
 
-    print(f"{leeway=}")
     ans = 0
     for outlee in range(0, leeway + 1):
-        print(f"{outlee=}")
         for left in range(0, outlee + 1):
             right = outlee - left
-            print(f"{left=}, {right=}")
             for gaps in ugly_partition(leeway - outlee + num_gaps, num_gaps):
-                print(f"{gaps=}")
                 num, znum = to_bin(b, gaps, left, right)
                 andd, orr = (num & and_num == and_num), (znum & zand_num) == zand_num
-                print(f"{bin(and_num)=:>16}")
-                print(f"{bin(num)=:>20}")
-                print(f"{andd=}")
-                print(f"{bin(zand_num)=:>15}")
-                print(f"{bin(znum)=:>19}")
-                print(f"{orr=}")
-                print(andd, orr)
                 if andd and orr:
-                    print("yes")
                     ans += 1
     return ans
 
@@ -158,24 +144,50 @@ sum(get_num(s, b) for s, b in zip(springs, broken))
 ###
 # PART 2
 ###
-p = Path("test2.txt")
-if p.exists():
-    test_txt = p.read_text()
-    test_lines = test_txt.splitlines()
 
 
-### util defenitions
+def get_num(s: str, b: tuple[int]):
+    print(s, b)
+    num_gaps = len(b) - 1
+    leeway = len(s) - (sum(b) + num_gaps)
+    if leeway == 0:
+        return 1
+
+    and_num = int(s.replace(".", "0").replace("?", "0").replace("#", "1"), 2)  # used to check that every # is covered
+    zand_num = int(s.replace(".", "1").replace("?", "0").replace("#", "0"), 2)  # used to check that every . is empty
+
+    ans = 0
+    for outlee in range(0, leeway + 1):
+        for left in range(0, outlee + 1):
+            if "#" in s[:left]:
+                break
+            right = outlee - left
+            if "#" in s[len(s) - right :]:
+                continue
+            for gaps in ugly_partition(leeway - outlee + num_gaps, num_gaps):
+                num, znum = to_bin(b, gaps, left, right)
+                andd, orr = (num & and_num == and_num), (znum & zand_num) == zand_num
+                if andd and orr:
+                    ans += 1
+    return ans
 
 
-### parse input - cange parse_line if necessary
-# change parse_line if necessary
-def parse_line_2(line: str):
-    # TODO
-    return line
+##
+@lru_cache(1024)
+def ugly_partition(n, p):
+    return set(tuple(sum(x) for x in p) for p in set_partitions([1] * n, p))
 
+
+## TEST
+springs, broken = zip(*teststart)
+springs = clean_up(springs)
+###
+springs2 = ["?".join([s] * 5) for s in springs]
+broken2 = [b * 5 for b in broken]
+###
+with timed():
+    sum(get_num(s, b) for s, b in zip(springs2, broken2))
+###
 
 with timed():
-    teststart = parse_all_lines(test_lines, parse_line_2)
-    start = parse_all_lines(input_lines, parse_line_2)
-
-### main
+    print(sum(get_num(s, b) for s, b in zip(springs, broken)))
