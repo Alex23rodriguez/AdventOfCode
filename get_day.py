@@ -1,9 +1,9 @@
-from pathlib import Path
 from argparse import ArgumentParser
+from pathlib import Path
 
 import requests
-from markdownify import markdownify as md
 from bs4 import BeautifulSoup
+from markdownify import markdownify as md
 
 if __name__ == "__main__":
     # parse arguments
@@ -16,7 +16,16 @@ if __name__ == "__main__":
     # get problem
     url = f"https://adventofcode.com/{args.year}/day/{args.day}"
     print(url)
-    r = requests.request("GET", url)
+    cookie = input("Provide session cookie: ").strip('"')
+    if cookie:
+        headers = {"Cookie": f"session={cookie}"}
+        r = requests.get(url, headers=headers)
+        r2 = requests.get(f"{url}/input", headers=headers)
+    else:
+        r = requests.get(url)
+        r2 = None
+
+    assert r.status_code == 200, f"request failed with code {r.status_code}"
 
     # write into files
     p = Path(f"{args.year}/{args.day:02}")
@@ -33,5 +42,7 @@ if __name__ == "__main__":
             break
     (p / "main.py").write_text(Path("template.py").read_text())
 
-    # can't get input, but can prepare the file
-    (p / "input.txt").touch()
+    if r2:
+        (p / "input.txt").write_text(r2.text)
+    else:
+        (p / "input.txt").touch()
