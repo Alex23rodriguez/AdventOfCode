@@ -143,3 +143,65 @@ def get_from_grid(grid: list, criteria: Callable[[Any], bool]):
         for j, val in enumerate(line):
             if criteria(val):
                 yield (i, j), val
+
+
+def walk_from(
+    grid: list,
+    coord: tuple[int, int],
+    dir: tuple[int, int],
+    start=False,
+    hwrap=False,
+    vwrap=False,
+    limit=-1,
+    criteria=lambda _: True,
+):
+    """
+    given an initial coord and a direction vector,
+    retrieves the (coord, value) pair of all coords obtained from "walking" in direction `dir`
+
+    Stops when:
+    - limit is a positive integer and that number of results have been yielded
+    - then the outside is reached and that wrap direction is disabled
+    - a coord that does not meet the criteria is found
+
+    params:
+        grid: a 2 dimensional, rectangular
+        coord: the initial coordenate
+        dir: a delta vector, or direction to walk in
+        start: whether to also include the given coord. default False
+        hwrap: whether to wrap around the edge of the grid horizontally. default False
+        vwrap: whether to wrap around the edge of the grid vertically. default False
+        criteria: a filter function that the values must satisfy. defaults to all values accepted
+    """
+    i, j = coord
+    di, dj = dir
+    len_i, len_j = len(grid), len(grid[0])
+    assert 0 <= i < len_i, f"{i=} coord outside of range"
+    assert 0 <= j < len_j, f"{j=} coord outside of range"
+
+    if start and limit != 0 and criteria(grid[i][j]):
+        yield (i, j), grid[i][j]
+        limit -= 1
+
+    while limit != 0:
+        i = i + di
+        j = j + dj
+
+        if i < 0 or i >= len_i:
+            if not vwrap:
+                return
+            else:
+                i = i % len_i
+
+        if j < 0 or j >= len_j:
+            if not hwrap:
+                return
+            else:
+                j = j % len_j
+
+        val = grid[i][j]
+        if criteria(val):
+            yield (i, j), grid[i][j]
+            limit -= 1
+        else:
+            return
