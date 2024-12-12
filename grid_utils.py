@@ -136,6 +136,35 @@ def vgrow(
         ir += 1
     return (il, j), (ir, j)
 
+def grow(
+    grid: list,
+    coord: tuple[int, int],
+    criteria: Callable[[Any], bool],
+):
+    i, j = coord
+    assert 0 <= i < len(grid), f"{i=} coord outside of range"
+    assert 0 <= j < len(grid[0]), f"{j=} coord outside of range"
+
+    seen = set()
+    area = set()
+    queue = [coord]
+    seen.add(coord)
+    area.add(coord)
+    # prev_len = -1
+    while queue:
+        c = queue.pop()
+        i, j = c
+        if criteria(grid[i][j]):
+            area.add(c)
+            for c2, _ in get_adjacent(grid, c, diag=False):
+                if c2 not in seen:
+                    queue.append(c2)
+                    seen.add(c2)
+    return area
+
+
+
+
 
 def get_from_grid(grid: list, criteria: Callable[[Any], bool]):
     """retrieve all (coord, val) pairs that fulfill a certain criteria"""
