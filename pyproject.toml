@@ -18,6 +18,8 @@ python = "^3.12"
 requests = "^2.32.3"
 markdownify = "^0.14.1"
 more-itertools = "^10.5.0"
+numpy = "^2.2.0"
+python-dotenv = "^1.2.1"
 
 
 [tool.poetry.group.dev.dependencies]

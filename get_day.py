@@ -1,10 +1,13 @@
 from argparse import ArgumentParser
+from os import environ
 from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 from markdownify import markdownify as md
 
+load_dotenv()
 if __name__ == "__main__":
     # parse arguments
     parser = ArgumentParser()
@@ -16,14 +19,17 @@ if __name__ == "__main__":
     # get problem
     url = f"https://adventofcode.com/{args.year}/day/{args.day}"
     print(url)
-    cookie = input("Provide session cookie: ").strip('"')
-    if cookie:
+    cookie = environ["COOKIE_SESSION"]
+
+    while True:
         headers = {"Cookie": f"session={cookie}"}
         r = requests.get(url, headers=headers)
         r2 = requests.get(f"{url}/input", headers=headers)
-    else:
-        r = requests.get(url)
-        r2 = None
+
+        if r.status_code == 200:
+            break
+
+        cookie = input("Failed to fetch. Cookie: ")
 
     assert r.status_code == 200, f"request failed with code {r.status_code}"
 
@@ -35,6 +41,8 @@ if __name__ == "__main__":
 
     soup = BeautifulSoup(r.text, "html.parser")
     for c in soup.find_all("code"):
+        if len(c.text.split("\n")) == 1:
+            continue
         print(c.text)
         ans = input("is this the test input? ")
         if ans == "y":
