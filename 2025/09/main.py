@@ -130,8 +130,10 @@ def is_inside(c1, c2, horizontal):
     x1, y1 = c1
     x2, y2 = c2
     min_x, max_x = min(x1, x2), max(x1, x2)
+    min_y, max_y = min(y1, y2), max(y1, y2)
 
-    return all(any(left <= min_x and max_x <= right for left, right in horizontal[y]) for y in range(min(y1, y2), max(y1, y2) + 1))
+    corner_ys = set(y for y in horizontal.keys() if min_y <= y <= max_y)
+    return all(any(left <= min_x and max_x <= right for left, right in horizontal[y]) for y in corner_ys)
 
 
 # %%
@@ -142,8 +144,8 @@ def part2(st):
     corners, vert = get_corners_and_vertical_lines(st)
 
     print("getting horizontal lines...")
-    min_y, max_y = min(y for _, y in corners), max(y for _, y in corners)
-    horizontal = {i: get_horizontal_inside_ranges(i, corners, vert) for i in range(min_y, max_y + 1)}
+    ys = sorted(set(y for _, y in corners))
+    horizontal = {i: get_horizontal_inside_ranges(i, corners, vert) for i in ys}
 
     print("checking min distance...")
     # check no vertical lines adjacent
