@@ -1,27 +1,15 @@
 # %% imports
 import sys
 
+import numpy as np
+import sympy as sp
 from tqdm import tqdm
 
 sys.path.append("../..")
-import json
-import operator as op
-import re
-from collections import Counter, defaultdict
-from copy import deepcopy
-from functools import cmp_to_key, lru_cache, partial, reduce
-from itertools import (accumulate, combinations, combinations_with_replacement,
-                       permutations, zip_longest)
+from itertools import product
 from pathlib import Path
-from pprint import pprint
 
-from more_itertools import (bucket, chunked, distinct_combinations,
-                            distinct_permutations, distribute, locate, sliced,
-                            split_at, split_into, split_when, windowed)
-
-from algs import dijkstra, floyd_warshall
-from graph_utils import bfs, iden_cross
-from grid_utils import get_adjacent, get_from_grid, hgrow, vgrow, walk_from
+from graph_utils import bfs
 from util import timed
 
 # %% read files
@@ -84,46 +72,58 @@ print(sum(ans))
 # %%
 # %% PART 2
 # %%
-def apply2(curr: tuple[int, ...], button):
-    return tuple((c + 1 if i in button else c) for i, c in enumerate(curr))
-
-
-def get_children(goal, buttons, curr):
-    # print("curr: ", curr)
+def to_linear_system(buttons, goal):
+    ans = []
     for button in buttons:
-        new = apply2(curr, button)
-        if all(a <= b for a, b in zip(new, goal)):
-            # print(f"applied {button} and yielding {new}")
-            yield new
-        # print(f"skip applying {button} and yielding {new}")
+        ans.append([(1 if i in button else 0) for i in range(len(goal))])
+    ans.append(-np.array(goal))
+    return np.array(ans).T
 
 
+def get_max_val(m, goal, col):
+    row = m.T[col]
+    return min(g for r, g in zip(row, goal) if r)
+
+
+def get_min_presses(buttons, goal):
+    m = to_linear_system(buttons, goal)
+    rref, pivots = sp.Matrix(m).rref()
+    rref = np.array(rref)
+    # print(rref)
+
+    # get free variables
+    free = sorted(set(range(len(buttons))) - set(pivots))
+    # print(free)
+
+    # sol_matrix is made from the columns of all independent varibles and the bias column
+    sol_matrix = rref @ (-np.identity(len(buttons) + 1, dtype=int)[free + [-1]]).T
+
+    valid = []
+
+    # get max value for each free variable
+    max_free = [get_max_val(m, goal, f) for f in free]
+    # cartesian product of ranges
+    possible = product(*[list(range(v + 1)) for v in max_free])
+    for p in possible:
+        free_vector = np.array(p + (1,))
+        sol = sol_matrix @ np.array(free_vector)
+        if all(v >= 0 for v in sol) and all(v.denominator == 1 for v in sol):
+            valid.append(list(sol) + list(int(v) for v in free_vector[:-1]))
+
+    # return valid
+
+    return min(sum(sol) for sol in valid)
+
+
+# %%
 def part2(st):
     ans = []
     for _, buttons, goal in tqdm(st):
-        shortest_path = bfs(
-            (0,) * len(goal),
-            partial(get_children, goal, buttons),
-            goal,
-        )
-        ans.append(len(shortest_path) - 1)
-
+        ans.append(get_min_presses(buttons, goal))
     return ans
 
 
 # %%
-with timed():
-    ans = part2(start)
+ans = part2(start)
 print(ans)
 print(sum(ans))
-
-# %%
-_, buttons, goal = teststart[1]
-shortest_path = bfs(
-    (0,) * len(goal),
-    partial(get_children, goal, buttons),
-    goal,
-)
-
-# %%
-pprint(teststart[1])
